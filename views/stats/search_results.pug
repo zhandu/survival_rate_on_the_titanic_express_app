@@ -1,0 +1,70 @@
+extends ../layouts/main.pug
+
+block body-content
+    .container
+        include ../partials/main-nav.pug
+        
+        main
+            h1.display-5.text-center.mt-3.mb-5 Résultats de l'analyse
+            .w-50.mx-auto.my-5
+                p.text-center
+                    | Nombre de survivants de #{sex === 'all' ? 'tout sexe' : 'sexe ' + (sex === 'male' ? 'masculin' : 'féminin')} de #{pclass === 'all' ? 'toute' : pclass} classe âgés de #{min_age} à #{max_age} ans : 
+                    strong #{nbOfSurvivors}
+                p.text-center
+                    | Nombre de non survivants de #{sex === 'all' ? 'tout sexe' : 'sexe ' + (sex === 'male' ? 'masculin' : 'féminin')} de #{pclass === 'all' ? 'toute' : pclass} classe âgés de #{min_age} à #{max_age} ans : 
+                    strong #{nbOfNonSurvivors}
+                
+                if ['all', 'female'].includes(sex)
+                    canvas#femaleSurvivors(width='400' height='400')
+                if ['all', 'male'].includes(sex)
+                    canvas#maleSurvivors(width='400' height='400')
+            
+            p.text-center.mb-5
+                a.btn.btn-outline-secondary(href="/stats") Reset
+
+block scripts
+    script(type='text/javascript' src='/js/chart.min.js')
+    if ['all', 'female'].includes(sex)
+        script.
+                const female_survivors_ctx = document.getElementById('femaleSurvivors').getContext('2d');
+                const femaleSurvivorsChart = new Chart(female_survivors_ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ["Classe 1", "Classe 2", "Classe 3"],
+                        datasets: [
+                            {
+                                label: 'survivants féminins',
+                                data: [#{nbOfFirstClassFemaleSurvivors}, #{nbOfSecondClassFemaleSurvivors}, #{nbOfThirdClassFemaleSurvivors}],
+                                backgroundColor: '#22aa99'
+                            },
+                            {
+                                label: 'non survivants féminins',
+                                data: [#{nbOfFirstClassFemaleNonSurvivors}, #{nbOfSecondClassFemaleNonSurvivors}, #{nbOfThirdClassFemaleNonSurvivors}],
+                                backgroundColor: '#994499'
+                            }
+                        ]
+                    }
+                });
+    if ['all', 'male'].includes(sex)
+        script.
+                const male_survivors_ctx = document.getElementById('maleSurvivors').getContext('2d');
+                const maleSurvivorsChart = new Chart(male_survivors_ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: [
+                            "Classe 1", "Classe 2", "Classe 3"
+                        ],
+                        datasets: [
+                            {
+                                label: 'survivants masculins',
+                                data: [#{nbOfFirstClassMaleSurvivors}, #{nbOfSecondClassMaleSurvivors}, #{nbOfThirdClassMaleSurvivors}],
+                                backgroundColor: '#22aa99'
+                            },
+                            {
+                                label: 'non survivants masculins',
+                                data: [#{nbOfFirstClassMaleNonSurvivors}, #{nbOfSecondClassMaleNonSurvivors}, #{nbOfThirdClassMaleNonSurvivors}],
+                                backgroundColor: '#994499'
+                            }
+                        ]
+                    }
+                });

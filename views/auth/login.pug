@@ -1,0 +1,35 @@
+extends ../layouts/main.pug
+
+block body-content
+    .container
+        h2.text-info.text-center Examen
+        div.w-50.mx-auto.mt-5.pt-5
+            - const activeTab = typeof active_tab !== "undefined" ? active_tab : 'login'
+            ul#myTab.nav.nav-tabs(role='tablist')
+                li.nav-item(role='presentation')
+                    button#login-tab.nav-link(class=activeTab === 'login' ? 'active' : '', data-bs-toggle='tab' data-bs-target='#login' type='button' role='tab' aria-controls='login' aria-selected='true') Se connecter
+                li.nav-item(role='presentation')
+                    button#register-tab.nav-link(class=activeTab === 'register' ? 'active' : '', data-bs-toggle='tab' data-bs-target='#register' type='button' role='tab' aria-controls='register' aria-selected='false') S'inscrire
+            #myTabContent.tab-content.border.border-top-0.p-3
+                #login.tab-pane.fade.show(class=activeTab === 'login' ? 'active' : '', role='tabpanel' aria-labelledby='login-tab')
+                    form(action='/auth/login', method='POST')
+                        .mb-3
+                            label.form-label(for='email') Adresse e-mail
+                            input#email.form-control(type='email' aria-describedby='emailHelp' name='email' value=`${form_data && form_data.email ? form_data.email : ''}`)
+                            #emailHelp.form-text Nous ne partagerons jamais votre e-mail avec quelqu'un d'autre.
+                        .mb-3
+                            label.form-label(for='password') Mot de passe
+                            input#password.form-control(type='password', name='password')
+                        input(type='hidden' name='_csrf' value=`${csrf ? csrf : ''}`)
+                        button.btn.btn-outline-secondary.mb-3(type='submit') Se connecter
+                #register.tab-pane.fade.show(class=activeTab === 'register' ? 'active' : '', role='tabpanel' aria-labelledby='register-tab')
+                    form(action='/auth/register', method='POST')
+                        .mb-3
+                            label.form-label(for='reg_email') Adresse e-mail
+                            input#reg_email.form-control(type='email' aria-describedby='emailHelp' name='reg_email' value=`${form_data && form_data.reg_email ? form_data.reg_email : ''}`)
+                            #emailHelp.form-text Nous ne partagerons jamais votre e-mail avec quelqu'un d'autre.
+                        .mb-3
+                            label.form-label(for='reg_password') Mot de passe
+                            input#reg_password.form-control(type='password', name='reg_password')
+                        input(type='hidden' name='_csrf' value=`${csrf ? csrf : ''}`)
+                        button.btn.btn-outline-secondary.mb-3(type='submit') S'inscrire

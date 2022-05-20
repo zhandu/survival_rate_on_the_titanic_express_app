@@ -1,0 +1,29 @@
+extends ../layouts/main.pug
+
+block body-content
+    .container
+        include ../partials/main-nav.pug
+        
+        main
+            h1.display-5.text-center.mt-3.mb-5 Analyse statistique
+            div.w-50.mx-auto
+                form(action='/stats', method='POST')
+                    .mb-3
+                        label.form-label(for='sex') Sexe
+                        select#sex.form-select(name='sex')
+                            option(value='all' selected='') Tous
+                            option(value='male') Masculin
+                            option(value='female') Féminin
+                    label.form-label() Ages min et max
+                    .input-group.mb-3
+                        input.form-control(type='text' placeholder='Age min' value='0' name='min_age')
+                        input.form-control(type='text' placeholder='Age max' value='100' name='max_age')
+                    .mb-3
+                        label.form-label(for='pclass') Classe
+                        select#pclass.form-select(name='pclass')
+                            option(value='all' selected='') Toutes
+                            option(value='1') 1
+                            option(value='2') 2
+                            option(value='3') 3
+                    input(type='hidden' name='_csrf' value=`${csrf ? csrf : ''}`)
+                    button.btn.btn-outline-secondary.mb-3(type='submit') Analyser

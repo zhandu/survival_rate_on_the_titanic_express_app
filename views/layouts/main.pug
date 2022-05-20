@@ -1,0 +1,22 @@
+doctype html
+html(lang="fr")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title #{title ? title : 'Examen'}
+        link(href='/css/bootstrap.min.css' rel='stylesheet')
+    body
+        if errors && Object.keys(errors).length > 0
+            .toast-container.position-absolute.top-0.end-0.p-3
+                each errorName in Object.keys(errors)
+                    .toast(role='alert' aria-live='assertive' aria-atomic='true')
+                        .toast-header
+                            strong.me-auto #{errorName.toUpperCase()}
+                            button.btn-close(type='button' data-bs-dismiss='toast' aria-label='Close')
+                        .toast-body
+                            | #{errors[errorName]}
+        block body-content
+        script(src='/js/bootstrap.bundle.min.js')
+        script(src='/js/main.js')
+        block scripts
